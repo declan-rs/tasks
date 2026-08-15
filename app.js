@@ -5,11 +5,27 @@ class List {
     }
 }
 
-const taskList = new List("Monday's Todo", ["read emails", "write report", "tidy desk"]);
-initiateList(taskList);
+readTxtFile();
 
-const taskList2 = new List("Tuesday's Todo", ["read emails", "write report", "tidy desk"]);
-initiateList(taskList2);
+function readTxtFile() {
+    const lsInput = document.getElementById("list-input")
+    lsInput.addEventListener("change", handleFileSelection);
+}
+
+function handleFileSelection() {
+    if(this.files.length === 0) {
+        // No file selected
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function fileReadCompleted() {
+        console.log(reader.result);
+        let lines = reader.result.split("\n");
+        initiateList(new List(lines[0], lines.slice(1)));
+    };
+    reader.readAsText(this.files[0]);
+}
 
 function initiateList(list) {
     const outerContainer = document.createElement("div");
